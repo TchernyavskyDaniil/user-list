@@ -17,17 +17,23 @@
 			<li class="user" v-for="user in users" :key="user.id">
 				<div class="user-container">
 					<div class="user-info">
-						<span class="user-name user-text">{{upperCase ? user.name.toUpperCase() : user.name}}</span>
-						<span class="user-surname user-text">{{upperCase ? user.surname.toUpperCase() : user.surname}}</span>
-						<span class="user-patronymic user-text">{{upperCase ? user.patronymic.toUpperCase() : user.patronymic}}</span>
+						<span class="user-name user-text">
+							{{upperCase ? user.name.toUpperCase() : user.name}}
+						</span>
+						<span class="user-surname user-text">
+							{{upperCase ? user.surname.toUpperCase() : user.surname}}
+						</span>
+						<span class="user-patronymic user-text">
+							{{upperCase ? user.patronymic.toUpperCase() : user.patronymic}}
+						</span>
 					</div>
 					<img :src="user.img || defaultImg" alt="image profile" class="user-img">
 				</div>
 				<button type="button"
 				        class="copy-btn" title="copy current full name"
-				        v-clipboard:copy="copyUser(user.surname, user.name, user.patronymic)"
-				        v-clipboard:success="onCopy"
-				        v-clipboard:error="onError"
+				        v-clipboard:copy="copyUser(user)"
+				        v-clipboard:success="getReply"
+				        v-clipboard:error="getError"
 				>
 					Copy full name
 				</button>
@@ -88,14 +94,14 @@
       }
 	  },
 	  methods: {
-      onCopy(e) {
+      getReply(e) {
         alert('You just copied: ' + e.text)
       },
-      onError() {
+      getError() {
         alert('Failed to copy text')
       },
-		  copyUser(surname, name, pat) {
-        return surname + ' ' + name + ' ' + pat;
+		  copyUser(user) {
+        return `${user.name} ${user.surname} ${user.patronymic}`
 		  }
 	  }
   }
