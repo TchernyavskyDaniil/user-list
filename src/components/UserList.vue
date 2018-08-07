@@ -26,6 +26,7 @@
 						<span class="user-patronymic user-text">
 							{{upperCase ? user.patronymic.toUpperCase() : user.patronymic}}
 						</span>
+						<router-link :to="{name: 'UserForm', params: { id: user.id, userData: user }}">click</router-link>
 					</div>
 					<img :src="user.img || defaultImg" alt="image profile" class="user-img">
 				</div>
@@ -46,8 +47,8 @@
 	import defaultImg from '@/assets/defImg.png';
 
   export default {
-    name: "Users",
-	  data () {
+    name: "UserList",
+	  data() {
       return {
         defaultImg: defaultImg,
 	      showUsers: true,
@@ -132,6 +133,7 @@
 		flex-direction: column;
 		margin: 4px;
 		padding: 4px;
+		cursor: pointer;
 		
 		&:hover {
 			box-shadow: 0 0 9px 1px lightgrey;

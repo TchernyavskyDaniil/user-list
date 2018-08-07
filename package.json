@@ -11,7 +11,8 @@
   "dependencies": {
     "v-tooltip": "^2.0.0-rc.33",
     "vue": "^2.5.16",
-    "vue-clipboard2": "^0.2.1"
+    "vue-clipboard2": "^0.2.1",
+    "vue-router": "^3.0.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.0-rc.10",
