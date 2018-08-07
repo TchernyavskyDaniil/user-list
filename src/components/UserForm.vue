@@ -1,30 +1,53 @@
 <template>
-	<form class="user-info">
-		<span>{{userData.name}}</span>
-		<span>{{userData.surname}}</span>
-		<span>{{userData.patronymic}}</span>
-		<img :src="userData.img || defImg" alt="">
-		<router-link :to="{name: 'UserList'}">Back to main page</router-link>
+	<form class="profile" v-if="res">
+		<div class="profile-info">
+			<span>name: {{userData.firstName}}</span>
+			<span>last name: {{userData.lastName}}</span>
+			<span>company: {{userData.company}}</span>
+		</div>
+		<img :src="userData.picture" alt="">
+		<router-link :to="{name: 'UserList'}" class="user-profile">Back to main page</router-link>
 	</form>
+	<Loader v-else />
 </template>
 
 <script>
-  import defaultImg from '@/assets/defImg.png';
+  import { apiUrl } from '../uitls';
+  import Loader from './Loader'
+  import axios from 'axios';
 
   export default {
     name: "UserForm",
-	  data() {
+    components: {Loader},
+    data() {
       return {
         userData: [],
-	      defImg: defaultImg
+	      res: false
       }
 	  },
 	  mounted() {
-      this.userData = this.$route.params.userData
+      axios
+        .get(`${apiUrl}/${this.$route.params.id}`)
+        .then(response => {
+          this.userData = response.data;
+          this.res = true;
+          console.log('Data for user is here!')
+        })
 	  }
   }
 </script>
 
-<style scoped>
-
+<style lang="scss">
+	.profile {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+	
+	.profile-info {
+		display: flex;
+		flex-direction: column;
+		min-height: 100px;
+		justify-content: space-around;
+	}
 </style>

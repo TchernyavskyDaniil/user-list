@@ -13,22 +13,22 @@
 				Show users in {{upperCase ? 'lowercase' : 'uppercase'}}
 			</button>
 		</nav>
-		<ul class="users" v-bind:class="{userActive: showUsers}">
+		<ul class="users" v-if="res" v-bind:class="{userActive: showUsers}">
 			<li class="user" v-for="user in users" :key="user.id">
 				<div class="user-container">
 					<div class="user-info">
 						<span class="user-name user-text">
-							{{upperCase ? user.name.toUpperCase() : user.name}}
+							{{upperCase ? user.firstName.toUpperCase() : user.firstName}}
 						</span>
 						<span class="user-surname user-text">
-							{{upperCase ? user.surname.toUpperCase() : user.surname}}
+							{{upperCase ? user.lastName.toUpperCase() : user.lastName}}
 						</span>
-						<span class="user-patronymic user-text">
-							{{upperCase ? user.patronymic.toUpperCase() : user.patronymic}}
+						<span class="user-company user-text">
+							{{upperCase ? user.company.toUpperCase() : user.company}}
 						</span>
-						<router-link :to="{name: 'UserForm', params: { id: user.id, userData: user }}">click</router-link>
+						<router-link :to="{name: 'UserForm', params: { id: user.id }}" class="user-profile">Open profile</router-link>
 					</div>
-					<img :src="user.img || defaultImg" alt="image profile" class="user-img">
+					<img :src="user.picture" alt="image profile" class="user-img">
 				</div>
 				<button type="button"
 				        class="copy-btn" title="copy current full name"
@@ -40,58 +40,26 @@
 				</button>
 			</li>
 		</ul>
+		<Loader v-else />
 	</div>
 </template>
 
 <script>
-	import defaultImg from '@/assets/defImg.png';
+	import { apiUrl } from '../uitls';
+  import Loader from './Loader'
+	import axios from 'axios';
 
   export default {
     name: "UserList",
-	  data() {
+    components: {Loader},
+    data() {
       return {
-        defaultImg: defaultImg,
 	      showUsers: true,
 	      infoMsgShow: 'open/close user list',
 	      upperCase: false,
 	      message: 'Copy these text',
-        users: [
-	        {
-	          id: 1,
-		        name: 'Daniil',
-		        surname: 'Tchernyavsky',
-            patronymic: 'Ivanovich',
-		        img: ''
-	        },
-          {
-            id: 2,
-            name: 'Mark',
-            surname: 'Strahov',
-            patronymic: 'Mihailovich',
-            img: ''
-          },
-          {
-            id: 3,
-            name: 'Denis',
-            surname: 'Adnerson',
-            patronymic: 'Kekovich',
-            img: ''
-          },
-          {
-            id: 4,
-            name: 'Darya',
-            surname: 'Karpenko',
-            patronymic: 'Ivanovna',
-            img: ''
-          },
-          {
-            id: 5,
-            name: 'Max',
-            surname: 'Petukhov',
-            patronymic: 'Ivanovich',
-            img: ''
-          }
-        ]
+        users: [],
+	      res: false
       }
 	  },
 	  methods: {
@@ -104,6 +72,15 @@
 		  copyUser(user) {
         return `${user.name} ${user.surname} ${user.patronymic}`
 		  }
+	  },
+	  mounted() {
+      axios
+	      .get(apiUrl)
+	      .then(response => {
+          this.users = response.data;
+          this.res = true;
+          console.log('Data for main page is here!')
+	      })
 	  }
   }
 </script>
@@ -156,15 +133,33 @@
 	.copy-btn {
 		max-height: 25px;
 		margin: 0 auto;
+		cursor: pointer;
 	}
 	
 	.user-container {
 		display: flex;
 		flex-direction: row;
+		padding: 5px;
 	}
 	
 	.user-text {
 		text-overflow: ellipsis;
 		overflow: hidden;
+		padding: 0 0 3px 0;
+	}
+	
+	.user-profile {
+		border: 1px solid #42b983;
+		color: #42b983;
+		padding: 4px;
+		border-radius: 2em;
+		font-size: 0.9em;
+		margin: 5px;
+		text-decoration: none;
+		
+		&:hover {
+			color: white;
+			background-color: #42b983;
+		}
 	}
 </style>
