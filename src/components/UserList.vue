@@ -42,6 +42,7 @@
 				</button>
 			</li>
 		</ul>
+		<span class="data-err" v-else-if="err">Can not load profiles</span>
 		<Loader v-else />
 	</div>
 </template>
@@ -61,7 +62,8 @@
 	      upperCase: false,
 	      message: 'Copy these text',
         users: [],
-	      res: false
+	      res: false,
+	      err: false
       }
 	  },
 	  methods: {
@@ -82,6 +84,10 @@
           this.users = response.data;
           this.res = true;
           console.log('Data for main page is here!')
+	      })
+	      .catch(() => {
+	        this.err = true;
+	        console.log('Oops, smth wrong!')
 	      })
 	  }
   }

@@ -14,6 +14,10 @@
 		</p>
 		<router-link :to="{name: 'UserList'}" class="user-profile">Back to main page</router-link>
 	</form>
+	<div v-else-if="err" class="data-err">
+		<span>Can not load data!</span>
+		<router-link :to="{name: 'UserList'}" class="user-profile err">Back to main page</router-link>
+	</div>
 	<Loader v-else />
 </template>
 
@@ -28,7 +32,8 @@
     data() {
       return {
         userData: [],
-	      res: false
+	      res: false,
+	      err: false
       }
 	  },
 	  methods: {
@@ -44,6 +49,9 @@
           this.res = true;
           console.log('Data for user is here!')
         })
+	      .catch(() => {
+	        this.err = true;
+	        console.log('Oops, smth wrong!')})
 	  }
   }
 </script>
@@ -69,5 +77,19 @@
 		flex-direction: column;
 		justify-content: space-around;
 		padding: 8px 0;
+	}
+	
+	.data-err {
+		display: flex;
+		flex-direction: column;
+		margin: 100px;
+		font-size: 2em;
+	}
+	
+	.err {
+		max-width: 200px;
+		margin: 0 auto;
+		font-size: 20px;
+		margin-top: 10px;
 	}
 </style>
