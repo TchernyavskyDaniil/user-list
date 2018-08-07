@@ -1,11 +1,17 @@
 <template>
 	<form class="profile" v-if="res">
 		<div class="profile-info">
-			<span>name: {{userData.firstName}}</span>
-			<span>last name: {{userData.lastName}}</span>
-			<span>company: {{userData.company}}</span>
+			<div class="main-info">
+				<span>name: {{userData.firstName}}</span>
+				<span>last name: {{userData.lastName}}</span>
+				<span>company: {{userData.company}}</span>
+				<span>e-mail: {{userData.email}}</span>
+			</div>
+			<img :src="userData.picture" alt="user image" class="user-img">
 		</div>
-		<img :src="userData.picture" alt="">
+		<p class="about-me">
+			{{userData.about}}
+		</p>
 		<router-link :to="{name: 'UserList'}" class="user-profile">Back to main page</router-link>
 	</form>
 	<Loader v-else />
@@ -25,6 +31,11 @@
 	      res: false
       }
 	  },
+	  methods: {
+      postData() {
+        console.log('in future!')
+      }
+	  },
 	  mounted() {
       axios
         .get(`${apiUrl}/${this.$route.params.id}`)
@@ -42,12 +53,21 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		max-width: 500px;
+		margin: 0 auto;
 	}
 	
 	.profile-info {
 		display: flex;
-		flex-direction: column;
+		flex-direction: row;
 		min-height: 100px;
 		justify-content: space-around;
+	}
+	
+	.main-info {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+		padding: 8px 0;
 	}
 </style>

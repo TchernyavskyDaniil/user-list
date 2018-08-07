@@ -1,17 +1,19 @@
 <template>
 	<div class="users-container">
 		<nav class="user-options">
-			<span class="users-count">Total users: {{users.length}}</span>
-			<button type="button"
-			        class="toggle"
-			        v-on:click="showUsers = !showUsers"
-			        v-tooltip="infoMsgShow"
-			>
-				{{showUsers ? 'Hide' : 'Show'}} users
-			</button>
-			<button type="button" class="uppercase" v-on:click="upperCase = !upperCase">
-				Show users in {{upperCase ? 'lowercase' : 'uppercase'}}
-			</button>
+			<div class="user-stats">
+				<span class="users-count">Total users: {{users.length}}</span>
+				<button type="button"
+				        class="toggle btn"
+				        v-on:click="showUsers = !showUsers"
+				        v-tooltip="infoMsgShow"
+				>
+					{{showUsers ? 'Hide' : 'Show'}} users
+				</button>
+				<button type="button" class="uppercase btn" v-on:click="upperCase = !upperCase">
+					Show users in {{upperCase ? 'lowercase' : 'uppercase'}}
+				</button>
+			</div>
 		</nav>
 		<ul class="users" v-if="res" v-bind:class="{userActive: showUsers}">
 			<li class="user" v-for="user in users" :key="user.id">
@@ -88,10 +90,21 @@
 <style lang="scss">
 	.user-options {
 		display: flex;
-		flex-direction: column;
 		align-items: center;
 		min-height: 100px;
+		background-color: #42b983;
+		flex-direction: row;
+		justify-content: flex-end;
+		color: white;
+	}
+	
+	.user-stats {
+		min-width: 400px;
+		min-height: 40px;
+		display: flex;
+		flex-direction: row;
 		justify-content: space-around;
+		align-items: center;
 	}
 	
 	.users {
@@ -103,6 +116,8 @@
 		align-items: center;
 		flex-direction: row;
 		flex-wrap: wrap;
+		justify-content: center;
+		padding: 10px;
 	}
 	
 	.user {
@@ -131,9 +146,11 @@
 	}
 	
 	.copy-btn {
-		max-height: 25px;
 		margin: 0 auto;
 		cursor: pointer;
+		border-radius: 2em;
+		border-color: #e3e3e3;
+		padding: 5px 10px;
 	}
 	
 	.user-container {
@@ -151,7 +168,7 @@
 	.user-profile {
 		border: 1px solid #42b983;
 		color: #42b983;
-		padding: 4px;
+		padding: 5px;
 		border-radius: 2em;
 		font-size: 0.9em;
 		margin: 5px;
@@ -161,5 +178,18 @@
 			color: white;
 			background-color: #42b983;
 		}
+	}
+	
+	.btn {
+		border-radius: 2em;
+		background-color: white;
+		border-color: transparent;
+		cursor: pointer;
+		padding: 5px 10px;
+		min-width: 85px;
+	}
+	
+	.uppercase {
+		min-width: 160px;
 	}
 </style>
