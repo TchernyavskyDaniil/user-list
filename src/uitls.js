@@ -1,1 +1,1 @@
-export const apiUrl = 'http://my-json-server.typicode.com/TchernyavskyDaniil/vue-exs/profiles';
+export const apiUrl = 'https://my-json-server.typicode.com/TchernyavskyDaniil/vue-exs/profiles';

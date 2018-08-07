@@ -33,7 +33,7 @@
 					<img :src="user.picture" alt="image profile" class="user-img">
 				</div>
 				<button type="button"
-				        class="copy-btn" title="copy current full name"
+				        class="copy-btn" title="copy current fullname"
 				        v-clipboard:copy="copyUser(user)"
 				        v-clipboard:success="getReply"
 				        v-clipboard:error="getError"
@@ -146,11 +146,18 @@
 	}
 	
 	.copy-btn {
+		border: 1px solid #e3e3e3;
+		color: black;
+		font-size: 0.9em;
+		text-decoration: none;
 		margin: 0 auto;
 		cursor: pointer;
 		border-radius: 2em;
-		border-color: #e3e3e3;
 		padding: 5px 10px;
+		
+		&:hover {
+			border: 1px solid black;
+		}
 	}
 	
 	.user-container {
