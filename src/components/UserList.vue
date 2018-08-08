@@ -1,59 +1,59 @@
 <template>
-	<div class="users-container">
-		<nav class="user-options">
-			<div class="user-stats">
-				<span class="users-count">Total users: {{users.length}}</span>
-				<button type="button"
-				        class="toggle btn"
-				        v-on:click="showUsers = !showUsers"
-				        v-tooltip="infoMsgShow"
+	<div class='users-container'>
+		<nav class='user-options'>
+			<div class='user-stats'>
+				<span class='users-count'>Total users: {{lengthUser}}</span>
+				<button type='button'
+				        class='toggle btn'
+				        v-on:click='showUsers = !showUsers'
+				        v-tooltip='infoMsgShow'
 				>
-					{{showUsers ? 'Hide' : 'Show'}} users
+				 {{getShowUsers}} users
 				</button>
-				<button type="button" class="uppercase btn" v-on:click="upperCase = !upperCase">
-					Show users in {{upperCase ? 'lowercase' : 'uppercase'}}
+				<button type='button' class='uppercase btn' v-on:click='upperCase = !upperCase'>
+					Show users in {{getUpperCase}}
 				</button>
 			</div>
 		</nav>
-		<ul class="users" v-if="res" v-bind:class="{userActive: showUsers}">
-			<li class="user" v-for="user in users" :key="user.id">
-				<div class="user-container">
-					<div class="user-info">
-						<span class="user-name user-text">
+		<span class='data-err' v-if='err'>Can not load profiles</span>
+		<ul class='users' v-else-if='res' v-bind:class='{userActive: showUsers}'>
+			<li class='user' v-for='user in users' :key='user.id'>
+				<div class='user-container'>
+					<div class='user-info'>
+						<span class='user-name user-text'>
 							{{upperCase ? user.firstName.toUpperCase() : user.firstName}}
 						</span>
-						<span class="user-surname user-text">
+						<span class='user-surname user-text'>
 							{{upperCase ? user.lastName.toUpperCase() : user.lastName}}
 						</span>
-						<span class="user-company user-text">
+						<span class='user-company user-text'>
 							{{upperCase ? user.company.toUpperCase() : user.company}}
 						</span>
-						<router-link :to="{name: 'UserForm', params: { id: user.id }}" class="user-profile">Open profile</router-link>
+						<router-link :to='{name: "UserForm", params: { id: user.id }}' class='user-profile'>Open profile</router-link>
 					</div>
-					<img :src="user.picture" alt="image profile" class="user-img">
+					<img :src='user.picture' alt='image profile' class='user-img'>
 				</div>
-				<button type="button"
-				        class="copy-btn" title="copy current fullname"
-				        v-clipboard:copy="copyUser(user)"
-				        v-clipboard:success="getReply"
-				        v-clipboard:error="getError"
+				<button type='button'
+				        class='copy-btn' title='copy current fullname'
+				        v-clipboard:copy='copyUser(user)'
+				        v-clipboard:success='getReply'
+				        v-clipboard:error='getError'
 				>
 					Copy full name
 				</button>
 			</li>
 		</ul>
-		<span class="data-err" v-else-if="err">Can not load profiles</span>
 		<Loader v-else />
 	</div>
 </template>
 
 <script>
-	import { apiUrl } from '../uitls';
-  import Loader from './Loader'
+	import { apiUrl } from '@/uitls';
+  import Loader from '@/components/Loader'
 	import axios from 'axios';
 
   export default {
-    name: "UserList",
+    name: 'UserList',
     components: {Loader},
     data() {
       return {
@@ -77,6 +77,17 @@
         return `${user.name} ${user.surname} ${user.patronymic}`
 		  }
 	  },
+	  computed: {
+      lengthUser() {
+        return this.users.length
+      },
+		  getShowUsers() {
+        return this.showUsers ? 'Hide' : 'Show'
+		  },
+		  getUpperCase() {
+        return this.upperCase ? 'lowercase' : 'uppercase'
+		  }
+	  },
 	  mounted() {
       axios
 	      .get(apiUrl)
@@ -93,7 +104,7 @@
   }
 </script>
 
-<style lang="scss">
+<style lang='scss'>
 	.user-options {
 		display: flex;
 		align-items: center;

@@ -1,33 +1,33 @@
 <template>
-	<form class="profile" v-if="res">
-		<div class="profile-info">
-			<div class="main-info">
+	<div v-if='err' class='data-err'>
+		<span>Can not load data!</span>
+		<router-link :to='{name: "UserList"}' class='user-profile err'>Back to main page</router-link>
+	</div>
+	<form class='profile' v-else-if='res'>
+		<div class='profile-info'>
+			<div class='main-info'>
 				<span>name: {{userData.firstName}}</span>
 				<span>last name: {{userData.lastName}}</span>
 				<span>company: {{userData.company}}</span>
 				<span>e-mail: {{userData.email}}</span>
 			</div>
-			<img :src="userData.picture" alt="user image" class="user-img">
+			<img :src='userData.picture' alt='user image' class='user-img'>
 		</div>
-		<p class="about-me">
+		<p class='about-me'>
 			{{userData.about}}
 		</p>
-		<router-link :to="{name: 'UserList'}" class="user-profile">Back to main page</router-link>
+		<router-link :to='{name: "UserList"}' class='user-profile'>Back to main page</router-link>
 	</form>
-	<div v-else-if="err" class="data-err">
-		<span>Can not load data!</span>
-		<router-link :to="{name: 'UserList'}" class="user-profile err">Back to main page</router-link>
-	</div>
 	<Loader v-else />
 </template>
 
 <script>
-  import { apiUrl } from '../uitls';
-  import Loader from './Loader'
+  import { apiUrl } from '@/uitls';
+  import Loader from '@/components/Loader'
   import axios from 'axios';
 
   export default {
-    name: "UserForm",
+    name: 'UserForm',
     components: {Loader},
     data() {
       return {
@@ -56,7 +56,7 @@
   }
 </script>
 
-<style lang="scss">
+<style lang='scss'>
 	.profile {
 		display: flex;
 		flex-direction: column;

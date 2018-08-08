@@ -1,15 +1,13 @@
 <template>
-	<div class="v-spinner" v-show="loading">
-		<div class="v-clip" v-bind:style="spinnerStyle">
+	<div class='v-spinner' v-show='loading'>
+		<div class='v-clip' v-bind:style='spinnerStyle'>
 		</div>
 	</div>
 </template>
 
 <script>
   export default {
-
     name: 'ClipLoader',
-
     props: {
       loading: {
         type: Boolean,
@@ -52,7 +50,6 @@
 		height: 100%;
 		margin: 25px auto;
 		text-align: center;
-		
 	}
 	
 	.v-spinner .v-clip

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import UserForm from '@/components/UserForm'
-import UserList from '@/components/UserList'
+import UserForm from '../components/UserForm'
+import UserList from '../components/UserList'
 
 Vue.use(Router)
 
