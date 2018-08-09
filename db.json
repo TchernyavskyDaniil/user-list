@@ -9,28 +9,12 @@
       "accessLevel": "guest",
       "firstName": "Morton",
       "lastName": "Moses",
-      "company": "VICON",
+      "company": "VICONs",
       "email": "morton.moses@vicon.ca",
       "phone": "+7 (804) 520-2415",
       "address": "858 Conway Street, Weedville, Texas, 2503",
       "about": "Lorem in do laboris ipsum incididunt excepteur reprehenderit occaecat qui dolor ea eu aute. Aliquip sit veniam esse aliquip deserunt sit incididunt deserunt sit enim id nulla et. Culpa culpa ea quis culpa officia labore.",
       "registered": "07.11.2017"
-    },
-    {
-      "id": 1,
-      "isActive": true,
-      "balance": "$3,174.85",
-      "picture": "https://ru.vuejs.org/images/logo.png",
-      "age": 29,
-      "accessLevel": "user",
-      "firstName": "Ramona",
-      "lastName": "Conley",
-      "company": "COMTRAK",
-      "email": "ramona.conley@comtrak.org",
-      "phone": "+7 (829) 433-2125",
-      "address": "369 Matthews Court, Cresaptown, Indiana, 9945",
-      "about": "Enim culpa in aute nostrud enim consequat duis non Lorem. Veniam laboris laborum sunt cillum. Adipisicing velit incididunt Lorem tempor eu. Enim ullamco adipisicing magna minim commodo. Fugiat tempor mollit tempor excepteur eiusmod quis nostrud magna voluptate velit labore ullamco nostrud nulla. Ex ut anim adipisicing ut exercitation Lorem quis nisi.",
-      "registered": "01.01.2018"
     },
     {
       "id": 2,
@@ -175,6 +159,18 @@
       "address": "387 Revere Place, Tivoli, Minnesota, 4564",
       "about": "Commodo excepteur velit elit laborum veniam sunt aliqua. Dolor cillum do do elit do aliqua. Occaecat laborum aute commodo qui labore cillum do qui eu proident veniam officia cillum in. Anim eiusmod anim exercitation cillum veniam consectetur irure magna nisi consequat mollit. Tempor aliqua magna id aliqua ullamco consectetur cupidatat do adipisicing ut laborum eiusmod.",
       "registered": "16.12.2016"
+    },
+    {
+      "age": "21",
+      "firstName": "Max",
+      "lastName": "Petukhov",
+      "email": "nv.mail",
+      "company": "Sonar",
+      "about": "No",
+      "address": "Write here something!",
+      "phone": "Write here something!",
+      "picture": "https://ru.vuejs.org/images/logo.png",
+      "id": 12
     }
   ]
 }
