@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "nprogress": "^0.2.0",
     "v-tooltip": "^2.0.0-rc.33",
     "vue": "^2.5.16",
     "vue-clipboard2": "^0.2.1",
