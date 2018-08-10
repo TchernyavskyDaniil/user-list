@@ -7,24 +7,24 @@ import AddUser from '@/components/AddUser'
 Vue.use(Router)
 
 const index = new Router({
-  mode: 'history',
-  routes: [
-    {
-      path: '/',
-      name: 'UserList',
-      component: UserList
-    },
-    {
-      path: '/user/:id',
-      name: 'UserForm',
-      component: UserForm
-    },
-    {
-      path: '/addUser',
-      name: 'AddUser',
-      component: AddUser
-    }
-  ]
+	mode: 'history',
+	routes: [
+		{
+			path: '/',
+			name: 'UserList',
+			component: UserList
+		},
+		{
+			path: '/user/:id',
+			name: 'UserForm',
+			component: UserForm
+		},
+		{
+			path: '/addUser',
+			name: 'AddUser',
+			component: AddUser
+		}
+	]
 })
 
 export default index

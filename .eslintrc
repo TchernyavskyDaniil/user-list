@@ -1,0 +1,9 @@
+{
+  "root": true,
+  "extends": ["prettier", "prettier/standard", "plugin:vue/recommended", "@vue/prettier"],
+  "plugins": ["vue", "prettier"],
+  "rules": {
+    "prettier/prettier": "error",
+    "vue/attributes-order": "off"
+  }
+}
