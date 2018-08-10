@@ -1,5 +1,5 @@
 <template>
-	<div class="add-user-container">
+	<form class="add-user-container">
 		<label class="add-user-label">
 			<span class="user-add">
 				Age <input class="input-user" type="text" value="Write here something!" ref="age">
@@ -26,70 +26,80 @@
 				Phone <input class="input-user" type="text" value="Write here something!" ref="phone">
 			</span>
 		</label>
-		<button type="button" class="user-profile add" v-on:click="addData">Add</button>
-	</div>
+		<div class="actions-add">
+			<button type="button" class="user-profile add" v-on:click="addData">Add</button>
+			<router-link class="user-profile back" :to="{name: 'UserList'}">Back</router-link>
+		</div>
+	</form>
 </template>
 
 <script>
 import { apiUrl, vueImg } from '@/uitls'
-import axios from 'axios'
+import { instance as axios } from '@/axios'
 import NProgress from 'nprogress/nprogress'
 
 export default {
-  name: 'AddUser',
-  data() {
-    return {
-      userData: {},
-      id: 0
-    }
-  },
-  methods: {
-    addData() {
-      Object.keys(this.$refs).forEach(key => {
-        this.userData[key] = this.$refs[key].value
-      })
+	name: 'AddUser',
+	data() {
+		return {
+			userData: {},
+			id: 0
+		}
+	},
+	methods: {
+		addData() {
+			Object.keys(this.$refs).forEach(key => {
+				this.userData[key] = this.$refs[key].value
+			})
 
-      this.userData.picture = vueImg
+			this.userData.picture = vueImg
 
-      this.postData()
-    },
-    postData() {
-      NProgress.start()
-      axios.post(apiUrl, this.userData).then(() => {
-        NProgress.done()
-        console.log('User added!')
-        this.$router.push({ name: 'UserList' })
-      })
-    }
-  },
-  mounted() {
-    this.id = this.$route.params.userLen
-  }
+			this.postData()
+		},
+		postData() {
+			NProgress.start()
+			axios.post(apiUrl, this.userData).then(() => {
+				NProgress.done()
+				console.log('User added!')
+				this.$router.push({ name: 'UserList' })
+			})
+		}
+	},
+	mounted() {
+		NProgress.start()
+		this.id = this.$route.params.userLen
+		NProgress.done()
+	}
 }
 </script>
 
 <style lang="scss">
 .add-user-container {
-  margin: 20px;
+	margin: 20px;
 }
 
 .add-user-label {
-  display: flex;
-  flex-direction: column;
-  min-height: 250px;
-  justify-content: space-around;
-  width: 350px;
-  margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	min-height: 250px;
+	justify-content: space-around;
+	width: 350px;
+	margin: 0 auto;
 }
 
 .user-add {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
 }
 
-.add {
-  min-width: 80px;
-  margin: 20px;
+.actions-add {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	width: 40%;
+	margin: 0 auto;
+	justify-content: space-evenly;
+	margin-top: 10px;
 }
 </style>

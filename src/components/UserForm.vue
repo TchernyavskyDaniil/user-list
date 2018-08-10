@@ -27,138 +27,139 @@
 <script>
 import { apiUrl } from '@/uitls'
 import Loader from '@/components/Loader'
-import axios from 'axios'
+import { instance as axios } from '@/axios'
 import NProgress from 'nprogress/nprogress'
 
 export default {
-  name: 'UserForm',
-  components: { Loader },
-  data() {
-    return {
-      userData: [],
-      currentName: '',
-      res: false,
-      err: false
-    }
-  },
-  methods: {
-    getNewOptions() {
-      Object.keys(this.userData).forEach(key => {
-        if (this.$refs[key]) {
-          this.userData[key] = this.$refs[key].value
-        }
-      })
+	name: 'UserForm',
+	components: { Loader },
+	data() {
+		return {
+			userData: [],
+			currentName: '',
+			res: false,
+			err: false
+		}
+	},
+	methods: {
+		getNewOptions() {
+			Object.keys(this.userData).forEach(key => {
+				if (this.$refs[key]) {
+					this.userData[key] = this.$refs[key].value
+				}
+			})
 
-      console.log('New data saved!')
+			console.log('New data saved!')
 
-      this.postData()
-    },
-    postData() {
-      axios
-        .patch(`${apiUrl}/${this.$route.params.id}`, this.userData)
-        .then(() => {
-          console.log('Data is updated!')
-          this.getUser()
-        })
-        .catch(e => console.log(e))
-    },
-    getUser() {
-      this.res = false
-      this.err = false
-      axios
-        .get(`${apiUrl}/${this.$route.params.id}`)
-        .then(response => {
-          this.userData = response.data
-          this.res = true
-          console.log('Data for user is here!')
-        })
-        .catch(() => {
-          this.err = true
-          console.log('Oops, smth wrong!')
-        })
-    }
-  },
-  mounted() {
-    NProgress.start()
-    this.getUser()
-    NProgress.done()
-  }
+			this.postData()
+		},
+		postData() {
+			axios
+				.patch(`${apiUrl}/${this.$route.params.id}`, this.userData)
+				.then(() => {
+					console.log('Data is updated!')
+					this.getUser()
+				})
+				.catch(e => console.log(e))
+		},
+		getUser() {
+			NProgress.start()
+			this.res = false
+			this.err = false
+			axios
+				.get(`${apiUrl}/${this.$route.params.id}`)
+				.then(response => {
+					this.userData = response.data
+					this.res = true
+					console.log('Data for user is here!')
+					NProgress.done()
+				})
+				.catch(() => {
+					this.err = true
+					console.log('Oops, smth wrong!')
+					NProgress.done()
+				})
+		}
+	},
+	mounted() {
+		this.getUser()
+	}
 }
 </script>
 
 <style lang='scss'>
 .profile {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 500px;
-  margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	max-width: 500px;
+	margin: 0 auto;
 }
 
 .profile-info {
-  display: flex;
-  flex-direction: row;
-  min-height: 100px;
-  justify-content: space-around;
-  min-width: 500px;
+	display: flex;
+	flex-direction: row;
+	min-height: 100px;
+	justify-content: space-around;
+	min-width: 500px;
 }
 
 .main-info {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  padding: 8px 0;
-  min-width: 300px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	padding: 8px 0;
+	min-width: 300px;
 }
 
 .data-err {
-  display: flex;
-  flex-direction: column;
-  margin: 100px;
-  font-size: 2em;
+	display: flex;
+	flex-direction: column;
+	margin: 100px;
+	font-size: 2em;
 }
 
 .err {
-  max-width: 200px;
-  margin: 0 auto;
-  font-size: 20px;
-  margin-top: 10px;
+	max-width: 200px;
+	margin: 0 auto;
+	font-size: 20px;
+	margin-top: 10px;
 }
 
 .actions-profile {
-  display: flex;
-  flex-direction: row;
-  min-width: 400px;
-  justify-content: space-evenly;
+	display: flex;
+	flex-direction: row;
+	min-width: 400px;
+	justify-content: space-evenly;
 }
 
 .input-user {
-  border: none;
-  border-bottom: 1px solid #42b983;
-  display: inline-block;
-  padding: 3px;
-  overflow: hidden;
-  min-width: 180px;
-  text-overflow: ellipsis;
+	border: none;
+	border-bottom: 1px solid #42b983;
+	display: inline-block;
+	padding: 3px;
+	overflow: hidden;
+	min-width: 180px;
+	text-overflow: ellipsis;
 }
 
 .label-user {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
 }
 
 .about-user {
-  min-height: 200px;
-  width: 100%;
+	min-height: 200px;
+	width: 100%;
 }
 
 .about-user-inpt {
-  width: 100%;
-  min-height: 200px;
-  border-radius: 10px;
-  border-color: lightgray;
-  padding: 10px;
+	width: 100%;
+	min-height: 200px;
+	border-radius: 10px;
+	border-color: lightgray;
+	padding: 10px;
 }
 </style>
