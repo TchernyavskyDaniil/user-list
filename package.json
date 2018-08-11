@@ -8,7 +8,8 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "fake": "json-server --watch db.json",
-    "prettier": "prettier --write 'src/**/*.vue'"
+    "prettier": "prettier --write 'src/**/*.vue'",
+    "prettierJs": "prettier --write 'src/**/*.js'"
   },
   "dependencies": {
     "axios": "^0.18.0",

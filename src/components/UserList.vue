@@ -1,59 +1,78 @@
 <template>
-	<div class='users-container'>
-		<nav class='user-options'>
-			<router-link :to='{name: "AddUser"}' class="add-user">
+	<div class="users-container">
+		<nav class="user-options">
+			<router-link
+				:to="{name: 'AddUser'}"
+				class="add-user">
 				+
 			</router-link>
-			<div class='user-stats'>
-				<span class='users-count'>Total users: {{lengthUser}}</span>
-				<button type='button'
-				        class='toggle btn'
-				        v-on:click='showUsers = !showUsers'
-				        v-tooltip='infoMsgShow'
+			<div class="user-stats">
+				<span class="users-count">Total users: {{ lengthUser }}</span>
+				<button
+					type="button"
+					class="toggle btn"
+					@click="showUsers = !showUsers"
+					v-tooltip="infoMsgShow"
 				>
-				 {{getShowUsers}} users
+					{{ getShowUsers }} users
 				</button>
-				<button type='button' class='uppercase btn' v-on:click='upperCase = !upperCase'>
-					Show users in {{getUpperCase}}
+				<button
+					type="button"
+					class="uppercase btn"
+					@click="upperCase = !upperCase">
+					Show users in {{ getUpperCase }}
 				</button>
 			</div>
 		</nav>
-		<span class='data-err' v-if='err'>Can not load profiles</span>
-		<ul class='users' v-else-if='res' v-bind:class='{userActive: showUsers}'>
-			<li class='user' v-for='user in users' :key='user.id'>
-				<button type="button" class="btn-del" v-on:click="delUser(user.id)">X</button>
-				<div class='user-container'>
-					<div class='user-info'>
-						<span class='user-name user-text'>
-							{{upperCase ? user.firstName.toUpperCase() : user.firstName}}
+		<span class="data-err" v-if="err">
+			Can not load profiles
+		</span>
+		<Loader v-else-if="!res" />
+		<ul
+			class="users" v-else
+			:class="{userActive: showUsers}">
+			<li
+				class="user"
+				v-for="user in users"
+				:key="user.id">
+				<button
+					type="button" class="btn-del"
+					@click="delUser(user.id)">X</button>
+				<div class="user-container">
+					<div class="user-info">
+						<span class="user-name user-text">
+							{{ upperCase ? user.firstName.toUpperCase() : user.firstName }}
 						</span>
-						<span class='user-surname user-text'>
-							{{upperCase ? user.lastName.toUpperCase() : user.lastName}}
+						<span class="user-surname user-text">
+							{{ upperCase ? user.lastName.toUpperCase() : user.lastName }}
 						</span>
-						<span class='user-company user-text'>
-							{{upperCase ? user.company.toUpperCase() : user.company}}
+						<span class="user-company user-text">
+							{{ upperCase ? user.company.toUpperCase() : user.company }}
 						</span>
-						<router-link :to='{name: "UserForm", params: { id: user.id }}' class='user-profile'>Edit profile</router-link>
+						<router-link
+							:to="{name: 'UserForm', params: { id: user.id }}"
+							class="user-profile">Edit profile</router-link>
 					</div>
-					<img :src='user.picture' alt='image profile' class='user-img'>
+					<img
+						:src="user.picture" alt="image profile"
+						class="user-img">
 				</div>
-				<button type='button'
-				        class='copy-btn' title='copy current fullname'
-				        v-clipboard:copy='copyUser(user)'
-				        v-clipboard:success='getReply'
-				        v-clipboard:error='getError'
+				<button
+					type="button"
+					class="copy-btn" title="copy current fullname"
+					v-clipboard:copy="copyUser(user)"
+					v-clipboard:success="getReply"
+					v-clipboard:error="getError"
 				>
 					Copy full name
 				</button>
 			</li>
 		</ul>
-		<Loader v-else />
 	</div>
 </template>
-
 <script>
 import { apiUrl } from '@/uitls'
-import { instance as axios } from '@/axios'
+import axios from '@/axios'
 import Loader from '@/components/Loader'
 import NProgress from 'nprogress/nprogress'
 
@@ -71,6 +90,20 @@ export default {
 			err: false
 		}
 	},
+	computed: {
+		lengthUser() {
+			return this.users.length
+		},
+		getShowUsers() {
+			return this.showUsers ? 'Hide' : 'Show'
+		},
+		getUpperCase() {
+			return this.upperCase ? 'lowercase' : 'uppercase'
+		}
+	},
+	mounted() {
+		this.getUsers()
+	},
 	methods: {
 		getReply(e) {
 			alert('You just copied: ' + e.text)
@@ -85,7 +118,6 @@ export default {
 			axios
 				.delete(`${apiUrl}/${id}`)
 				.then(() => {
-					console.log('User deleted!')
 					this.getUsers()
 				})
 				.catch(e => console.log(e, 'User not deleted!'))
@@ -99,29 +131,13 @@ export default {
 				.then(response => {
 					this.users = response.data
 					this.res = true
-					console.log('Data for main page is here!')
 					NProgress.done()
 				})
 				.catch(() => {
 					this.err = true
-					console.log('Oops, smth wrong!')
 					NProgress.done()
 				})
 		}
-	},
-	computed: {
-		lengthUser() {
-			return this.users.length
-		},
-		getShowUsers() {
-			return this.showUsers ? 'Hide' : 'Show'
-		},
-		getUpperCase() {
-			return this.upperCase ? 'lowercase' : 'uppercase'
-		}
-	},
-	mounted() {
-		this.getUsers()
 	}
 }
 </script>

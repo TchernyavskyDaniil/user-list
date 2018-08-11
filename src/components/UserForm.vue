@@ -1,33 +1,48 @@
 <template>
-	<div v-if='err' class='data-err'>
+	<div v-if="err" class="data-err">
 		<span>Can not load data!</span>
-		<router-link :to='{name: "UserList"}' class='user-profile err'>Back to main page</router-link>
+		<router-link
+			:to="{name: 'UserList'}"
+			class="user-profile err">Back to main page</router-link>
 	</div>
-	<form class='profile' v-else-if='res'>
-		<div class='profile-info'>
-			<div class='main-info'>
-				<label class="label-user">name: <input class="input-user" type="text" :value="userData.firstName" ref="firstName"></label>
-				<label class="label-user">last name: <input class="input-user" type="text" :value="userData.lastName" ref="lastName"></label>
-				<label class="label-user">company: <input class="input-user" type="text" :value="userData.company" ref="company"></label>
-				<label class="label-user">e-mail: <input class="input-user" type="text" :value="userData.email" ref="email"></label>
+	<Loader v-else-if="!res" />
+	<form class="profile" v-else>
+		<div class="profile-info">
+			<div class="main-info">
+				<label class="label-user">
+					name:
+					<input class="input-user" type="text" v-model="userData.firstName">
+				</label>
+				<label class="label-user">
+					last name:
+					<input class="input-user" type="text" v-model="userData.lastName">
+				</label>
+				<label class="label-user">
+					company:
+					<input class="input-user" type="text" v-model="userData.company">
+				</label>
+				<label class="label-user">
+					e-mail:
+					<input class="input-user" type="text" v-model="userData.email">
+				</label>
 			</div>
-			<img :src='userData.picture' alt='user image' class='user-img'>
+			<img :src="userData.picture" alt="user image" class="user-img">
 		</div>
 		<label class="about-user">
-			<textarea class="about-user-inpt" :value="userData.about" ref="about">{{userData.about}}</textarea>
+			<textarea class="about-user-inpt" v-model="userData.about">Some here</textarea>
 		</label>
 		<div class="actions-profile">
-			<router-link :to='{name: "UserList"}' class='user-profile'>Back to main page</router-link>
-			<button type="button" v-on:click="getNewOptions" class="user-profile update">Update user info</button>
+			<router-link :to="{name: 'UserList'}" class="user-profile">Back to main page</router-link>
+			<button type="button" @click="getNewOptions" class="user-profile update">Update user info</button>
 		</div>
 	</form>
-	<Loader v-else />
+	
 </template>
 
 <script>
 import { apiUrl } from '@/uitls'
 import Loader from '@/components/Loader'
-import { instance as axios } from '@/axios'
+import axios from '@/axios'
 import NProgress from 'nprogress/nprogress'
 
 export default {
@@ -41,48 +56,42 @@ export default {
 			err: false
 		}
 	},
+	computed: {
+		userId() {
+			return this.$route.params.id
+		}
+	},
+	mounted() {
+		this.getUser()
+	},
 	methods: {
 		getNewOptions() {
-			Object.keys(this.userData).forEach(key => {
-				if (this.$refs[key]) {
-					this.userData[key] = this.$refs[key].value
-				}
-			})
-
-			console.log('New data saved!')
-
 			this.postData()
 		},
 		postData() {
 			axios
-				.patch(`${apiUrl}/${this.$route.params.id}`, this.userData)
+				.patch(`${apiUrl}/${this.userId}`, this.userData)
 				.then(() => {
-					console.log('Data is updated!')
 					this.getUser()
 				})
-				.catch(e => console.log(e))
+				.catch(() => (this.err = true))
 		},
 		getUser() {
 			NProgress.start()
 			this.res = false
 			this.err = false
 			axios
-				.get(`${apiUrl}/${this.$route.params.id}`)
+				.get(`${apiUrl}/${this.userId}`)
 				.then(response => {
 					this.userData = response.data
 					this.res = true
-					console.log('Data for user is here!')
 					NProgress.done()
 				})
 				.catch(() => {
 					this.err = true
-					console.log('Oops, smth wrong!')
 					NProgress.done()
 				})
 		}
-	},
-	mounted() {
-		this.getUser()
 	}
 }
 </script>

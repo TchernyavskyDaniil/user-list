@@ -1,6 +1,6 @@
 <template>
-	<div class='v-spinner' v-show='loading'>
-		<div class='v-clip' v-bind:style='spinnerStyle'>
+	<div class="v-spinner" v-show="loading">
+		<div class="v-clip" :style="spinnerStyle">
 		</div>
 	</div>
 </template>
