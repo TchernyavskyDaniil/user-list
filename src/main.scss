@@ -1,0 +1,33 @@
+.user-btn {
+  border: 1px solid #42b983;
+  color: #42b983;
+  padding: 5px;
+  border-radius: 2em;
+  font-size: 0.9em;
+  margin: 5px;
+  text-decoration: none;
+  min-height: 20px;
+  box-sizing: border-box;
+  min-width: 80px;
+  cursor: pointer;
+
+  &:hover {
+    color: white;
+    background-color: #42b983;
+  }
+}
+
+.user-img {
+  width: 120px;
+  height: 120px;
+}
+
+.input-user {
+  border: none;
+  border-bottom: 1px solid #42b983;
+  display: inline-block;
+  padding: 3px;
+  overflow: hidden;
+  min-width: 180px;
+  text-overflow: ellipsis;
+}

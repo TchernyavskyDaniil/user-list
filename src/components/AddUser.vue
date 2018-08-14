@@ -38,14 +38,14 @@
 			</span>
 		</label>
 		<div class="actions-add">
-			<button type="button" class="user-profile add" @click="addData">Add</button>
-			<router-link class="user-profile back" :to="{name: 'UserList'}">Back</router-link>
+			<button type="button" class="user-btn add" @click="addData">Add</button>
+			<router-link class="user-btn back" :to="{name: 'UserList'}">Back</router-link>
 		</div>
 	</form>
 </template>
 
 <script>
-import { apiUrl, vueImg } from '@/uitls'
+import { vueImg } from '@/uitls'
 import axios from '@/axios'
 import NProgress from 'nprogress/nprogress'
 
@@ -72,7 +72,7 @@ export default {
 		postData() {
 			NProgress.start()
 			axios
-				.post(apiUrl, this.userData)
+				.post('/profiles', this.userData)
 				.then(() => {
 					NProgress.done()
 					this.$router.push({ name: 'UserList' })

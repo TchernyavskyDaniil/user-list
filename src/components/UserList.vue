@@ -2,25 +2,20 @@
 	<div class="users-container">
 		<nav class="user-options">
 			<router-link
-				:to="{name: 'AddUser'}"
-				class="add-user">
+				:to="{name: 'AddUser'}" class="add-user">
 				+
 			</router-link>
 			<div class="user-stats">
 				<span class="users-count">Total users: {{ lengthUser }}</span>
 				<button
-					type="button"
-					class="toggle btn"
-					@click="showUsers = !showUsers"
-					v-tooltip="infoMsgShow"
+					type="button" class="toggle btn"
+					@click="showUsers = !showUsers" v-tooltip="infoMsgShow"
 				>
 					{{ getShowUsers }} users
 				</button>
 				<button
-					type="button"
-					class="uppercase btn"
-					@click="upperCase = !upperCase">
-					Show users in {{ getUpperCase }}
+					type="button" class="uppercase btn"
+					@click="upperCase = !upperCase">Show users in {{ getUpperCase }}
 				</button>
 			</div>
 		</nav>
@@ -28,50 +23,70 @@
 			Can not load profiles
 		</span>
 		<Loader v-else-if="!res" />
-		<ul
-			class="users" v-else
-			:class="{userActive: showUsers}">
-			<li
-				class="user"
-				v-for="user in users"
-				:key="user.id">
-				<button
-					type="button" class="btn-del"
-					@click="delUser(user.id)">X</button>
-				<div class="user-container">
-					<div class="user-info">
-						<span class="user-name user-text">
-							{{ upperCase ? user.firstName.toUpperCase() : user.firstName }}
-						</span>
-						<span class="user-surname user-text">
-							{{ upperCase ? user.lastName.toUpperCase() : user.lastName }}
-						</span>
-						<span class="user-company user-text">
-							{{ upperCase ? user.company.toUpperCase() : user.company }}
-						</span>
-						<router-link
-							:to="{name: 'UserForm', params: { id: user.id }}"
-							class="user-profile">Edit profile</router-link>
+		<div :class="{userActive: showUsers}" class="users-hidden" v-else>
+			<ul class="users">
+				<li
+					class="user" v-for="user in paginateData"
+					:key="user.id">
+					<button
+						type="button" class="btn-del"
+						@click="delUser(user.id)">X</button>
+					<div class="user-container">
+						<div class="user-info">
+							<span class="user-name user-text">
+								{{ upperCase ? user.firstName.toUpperCase() : user.firstName }}
+							</span>
+							<span class="user-surname user-text">
+								{{ upperCase ? user.lastName.toUpperCase() : user.lastName }}
+							</span>
+							<span class="user-company user-text">
+								{{ upperCase ? user.company.toUpperCase() : user.company }}
+							</span>
+							<router-link
+								:to="{name: 'UserForm', params: { id: user.id }}"
+								class="user-btn">Edit profile</router-link>
+						</div>
+						<img
+							:src="user.picture" alt="image profile"
+							class="user-img">
 					</div>
-					<img
-						:src="user.picture" alt="image profile"
-						class="user-img">
-				</div>
-				<button
-					type="button"
-					class="copy-btn" title="copy current fullname"
-					v-clipboard:copy="copyUser(user)"
-					v-clipboard:success="getReply"
-					v-clipboard:error="getError"
-				>
-					Copy full name
-				</button>
-			</li>
-		</ul>
+					<button
+						type="button"
+						class="copy-btn" title="copy current fullname"
+						v-clipboard:copy="copyUser(user)"
+						v-clipboard:success="getReply"
+						v-clipboard:error="getError"
+					>
+						Copy full name
+					</button>
+				</li>
+			</ul>
+			<button
+				type="button" :disabled="pageNumber === 0"
+				@click="prevPage" class="user-btn">
+				Previous
+			</button>
+			<ul class="pages">
+				<li v-for="(page, index) in totalPages" :key="page">
+					<button
+						class="user-btn page btnActive" v-if="index === pageNumber"
+						type="button"
+						@click="pageNumber = index">{{ page }}</button>
+					<button
+						class="user-btn page" v-else
+						type="button"
+						@click="pageNumber = index">{{ page }}</button>
+				</li>
+			</ul>
+			<button
+				type="button" :disabled="pageNumber >= currentCount - 1"
+				@click="nextPage" class="user-btn">
+				Next
+			</button>
+		</div>
 	</div>
 </template>
 <script>
-import { apiUrl } from '@/uitls'
 import axios from '@/axios'
 import Loader from '@/components/Loader'
 import NProgress from 'nprogress/nprogress'
@@ -81,13 +96,18 @@ export default {
 	components: { Loader },
 	data() {
 		return {
-			showUsers: true,
 			infoMsgShow: 'open/close user list',
 			upperCase: false,
 			message: 'Copy these text',
 			users: [],
 			res: false,
-			err: false
+			err: false,
+			showUsers: true,
+			// for pagination
+			pageNumber: 0,
+			totalPages: 0,
+			btnState: false,
+			size: 10
 		}
 	},
 	computed: {
@@ -99,44 +119,66 @@ export default {
 		},
 		getUpperCase() {
 			return this.upperCase ? 'lowercase' : 'uppercase'
+		},
+		// for pagination
+		currentCount() {
+			return this.pageCount()
+		},
+		paginateData() {
+			const start = this.pageNumber * this.size,
+				end = start + this.size
+
+			return this.users.slice(start, end)
 		}
 	},
 	mounted() {
 		this.getUsers()
 	},
 	methods: {
-		getReply(e) {
-			alert('You just copied: ' + e.text)
-		},
-		getError() {
-			alert('Failed to copy text')
-		},
-		copyUser(user) {
-			return `${user.firstName} ${user.lastName} ${user.company}`
-		},
-		delUser(id) {
-			axios
-				.delete(`${apiUrl}/${id}`)
-				.then(() => {
-					this.getUsers()
-				})
-				.catch(e => console.log(e, 'User not deleted!'))
-		},
 		getUsers() {
 			this.res = false
 			this.err = false
 			NProgress.start()
 			axios
-				.get(apiUrl)
+				.get('/profiles')
 				.then(response => {
 					this.users = response.data
 					this.res = true
+					this.totalPages = this.pageCount()
 					NProgress.done()
 				})
 				.catch(() => {
 					this.err = true
 					NProgress.done()
 				})
+		},
+		copyUser(user) {
+			return `${user.firstName} ${user.lastName} ${user.company}`
+		},
+		getReply(e) {
+			alert('You just copied: ' + e.text)
+		},
+		getError() {
+			alert('Failed to copy text')
+		},
+		delUser(id) {
+			axios
+				.delete(`/profiles/${id}`)
+				.then(() => this.getUsers())
+				.catch(e => console.log(e, 'User not deleted!'))
+		},
+		// for pagination
+		nextPage() {
+			this.pageNumber++
+		},
+		pageCount() {
+			let len = this.users.length,
+				size = this.size
+
+			return Math.ceil(len / size)
+		},
+		prevPage() {
+			this.pageNumber--
 		}
 	}
 }
@@ -165,6 +207,14 @@ export default {
 }
 
 .users {
+	width: 100%;
+	padding: 0;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+
+.users-hidden {
 	display: none;
 }
 
@@ -221,11 +271,6 @@ export default {
 	font-size: 14px;
 }
 
-.user-img {
-	width: 120px;
-	height: 120px;
-}
-
 .copy-btn {
 	border: 1px solid #e3e3e3;
 	color: black;
@@ -254,24 +299,6 @@ export default {
 	white-space: nowrap;
 }
 
-.user-profile {
-	border: 1px solid #42b983;
-	color: #42b983;
-	padding: 5px;
-	border-radius: 2em;
-	font-size: 0.9em;
-	margin: 5px;
-	text-decoration: none;
-	min-height: 20px;
-	box-sizing: border-box;
-	min-width: 80px;
-
-	&:hover {
-		color: white;
-		background-color: #42b983;
-	}
-}
-
 .btn {
 	border-radius: 2em;
 	background-color: white;
@@ -298,5 +325,22 @@ export default {
 	&:hover {
 		color: #42b983;
 	}
+}
+
+/* for pagination */
+
+.page {
+	min-width: 30px;
+}
+
+.pages {
+	padding: 0 5px 0 5px;
+	display: flex;
+	margin: 0;
+}
+
+.btnActive {
+	background-color: #42b983;
+	color: white;
 }
 </style>

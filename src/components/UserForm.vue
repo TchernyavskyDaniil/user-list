@@ -3,7 +3,7 @@
 		<span>Can not load data!</span>
 		<router-link
 			:to="{name: 'UserList'}"
-			class="user-profile err">Back to main page</router-link>
+			class="user-btn err">Back to main page</router-link>
 	</div>
 	<Loader v-else-if="!res" />
 	<form class="profile" v-else>
@@ -25,6 +25,22 @@
 					e-mail:
 					<input class="input-user" type="text" v-model="userData.email">
 				</label>
+				<label class="label-user">
+					age:
+					<input class="input-user" type="text" v-model="userData.age">
+				</label>
+				<label class="label-user">
+					phone:
+					<input class="input-user" type="text" v-model="userData.phone">
+				</label>
+				<label class="label-user">
+					address:
+					<input class="input-user" type="text" v-model="userData.address">
+				</label>
+				<label class="label-user">
+					registered:
+					<input class="input-user" type="text" v-model="userData.registered">
+				</label>
 			</div>
 			<img :src="userData.picture" alt="user image" class="user-img">
 		</div>
@@ -32,15 +48,13 @@
 			<textarea class="about-user-inpt" v-model="userData.about">Some here</textarea>
 		</label>
 		<div class="actions-profile">
-			<router-link :to="{name: 'UserList'}" class="user-profile">Back to main page</router-link>
-			<button type="button" @click="getNewOptions" class="user-profile update">Update user info</button>
+			<router-link :to="{name: 'UserList'}" class="user-btn">Back to main page</router-link>
+			<button type="button" @click="getNewOptions" class="user-btn update">Update user info</button>
 		</div>
 	</form>
-	
 </template>
 
 <script>
-import { apiUrl } from '@/uitls'
 import Loader from '@/components/Loader'
 import axios from '@/axios'
 import NProgress from 'nprogress/nprogress'
@@ -70,7 +84,7 @@ export default {
 		},
 		postData() {
 			axios
-				.patch(`${apiUrl}/${this.userId}`, this.userData)
+				.patch(`/profiles/${this.userId}`, this.userData)
 				.then(() => {
 					this.getUser()
 				})
@@ -81,7 +95,7 @@ export default {
 			this.res = false
 			this.err = false
 			axios
-				.get(`${apiUrl}/${this.userId}`)
+				.get(`/profiles/${this.userId}`)
 				.then(response => {
 					this.userData = response.data
 					this.res = true
@@ -111,6 +125,7 @@ export default {
 	min-height: 100px;
 	justify-content: space-around;
 	min-width: 500px;
+	align-items: center;
 }
 
 .main-info {
@@ -140,16 +155,6 @@ export default {
 	flex-direction: row;
 	min-width: 400px;
 	justify-content: space-evenly;
-}
-
-.input-user {
-	border: none;
-	border-bottom: 1px solid #42b983;
-	display: inline-block;
-	padding: 3px;
-	overflow: hidden;
-	min-width: 180px;
-	text-overflow: ellipsis;
 }
 
 .label-user {
